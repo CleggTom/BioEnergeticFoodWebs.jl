@@ -56,6 +56,8 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:nons
 
   extspecies = Int[]
 
+  p[:Arrays] = [p[:A]]
+
   function condition(t,y,integrator)
     # if t == Int(round(t))
     #   println(minimum(y[.!isext]))
@@ -81,6 +83,8 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:nons
     if p[:rewire_method] != :none
         p = update_params(p,integrator.u)
     end
+
+    push!(p[:Arrays],p[:A])
 
   end
 
