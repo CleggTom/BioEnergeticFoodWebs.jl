@@ -1,17 +1,22 @@
 language: julia
-sudo: false
+sudo: required
 os:
   - linux
 matrix:
   allow_failures:
-    - julia: 0.6
+    - julia: nightly
 julia:
-  - 0.5
   - 0.6
+<<<<<<< HEAD
 addons:
   apt:
     packages:
     - hdf5-tools
+=======
+  - nightly
+env:
+   - PYTHON=""
+>>>>>>> fa6b3cb808f543b403cb3109d29258a0d0f106b2
 script:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
   - julia --check-bounds=yes -e 'Pkg.clone(pwd()); Pkg.build("BioEnergeticFoodWebs"); Pkg.test("BioEnergeticFoodWebs"; coverage=true)'
