@@ -77,7 +77,7 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:nons
       push!(extspecies, sp_min)
 
       #set biomass to 0 to avoid ghost species
-    #   info(string("extinction of species ", sp_min))
+    #   info(string("extinction of species ", sp_min,"  ", integrator.t))
       integrator.u[sp_min] = 0.0
 
     if p[:rewire_method] != :none
