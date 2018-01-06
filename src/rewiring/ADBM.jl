@@ -47,9 +47,15 @@ end
 This function takes the terms calculated by getADBM_Terms() and uses them to determine the feeding
 links of species j. Used internally by ADBM().
 """
+j = 8
+function getFeedingLinks(S::Int64,E::Vector{Float64}, λ::Array{Float64},
+   H::Array{Float64},biomass::Vector{Float64},j)
 
-function getFeedingLinks(S::Int64,E::Vector{Float64}, λ::Array{Float64}, H::Array{Float64},j)
   profit = E ./ H[j,:]
+  # Setting profit of species with zero biomass  to -1.0
+  # This prevents them being included in the profitSort
+  profit[biomass .== 0.0] = -1.0
+
   profs = sortperm(profit,rev = true)
 
   λSort = λ[j,profs]
@@ -93,8 +99,10 @@ function ADBM(S::Int64,p::Dict{Symbol,Any},biomass::Vector{Float64})
   H = adbmTerms[:H]
   for j = 1:S
     if !p[:is_producer][j]
-      feeding = getFeedingLinks(S,E,λ,H,j)
-      adbmMAT[j,feeding] = 1
+      if biomass[j] > 0.0
+        feeding = getFeedingLinks(S,E,λ,H,biomass,j)
+        adbmMAT[j,feeding] = 1
+      end
     end
   end
   return(adbmMAT)
